@@ -69,11 +69,15 @@ const Cell = ({ num, boardState, boardDispatch }) => {
     }
   }
 
-  const handleClick = (num, boardState) => {
+  const handleClick = (num, cellState, boardState) => {
     if (num === boardState.searchNum) {
       cellDispatch({ type: "found" });
       boardDispatch({ type: "correctClick" });
     } else {
+      // Do nothing if cell is already found
+      if (cellState.state === "found") {
+        return;
+      }
       cellDispatch({ type: "cross" });
       timerId.current = setTimeout(() => {
         cellDispatch({ type: "hide" });
@@ -88,7 +92,7 @@ const Cell = ({ num, boardState, boardDispatch }) => {
   };
 
   return (
-    <td onClick={() => handleClick(num, boardState)}>
+    <td onClick={() => handleClick(num, cellState, boardState)}>
       {showText(cellState.state, num)}
     </td>
   );
