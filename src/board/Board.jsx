@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useRef } from "react";
+import { motion } from "framer-motion";
 import "./board.css";
 import getRandomBoard from "../utils/utils.js";
 
@@ -92,9 +93,13 @@ const Cell = ({ num, boardState, boardDispatch }) => {
   };
 
   return (
-    <td onClick={() => handleClick(num, cellState, boardState)}>
+    <motion.div
+      whileHover={{ scale: 1.1}}
+      whileTap={{ scale: 0.9 }}
+      onClick={() => handleClick(num, cellState, boardState)}
+    >
       {showText(cellState.state, num)}
-    </td>
+    </motion.div>
   );
 };
 
@@ -144,68 +149,63 @@ const Board = () => {
   console.log(boardState.board);
 
   return (
-    <div className="container">
-      <span className="game-heading">Photo memory</span>
-      <table>
-        <tbody>
-          <tr>
-            <Cell
-              num={boardState.board[0]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-            <Cell
-              num={boardState.board[1]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-            <Cell
-              num={boardState.board[2]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-          </tr>
-          <tr>
-            <Cell
-              num={boardState.board[3]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-            <Cell
-              num={boardState.board[4]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-            <Cell
-              num={boardState.board[5]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-          </tr>
-          <tr>
-            <Cell
-              num={boardState.board[6]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-            <Cell
-              num={boardState.board[7]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-            <Cell
-              num={boardState.board[8]}
-              boardState={boardState}
-              boardDispatch={boardDispatch}
-            />
-          </tr>
-        </tbody>
-      </table>
-      <button onClick={resetBoard}>Reset</button>
-      <div className="game-heading">
-        {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
+    <>
+      <div className="container">
+        <div className="game-heading">Photo memory</div>
+        <div className="game-heading">
+          {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
+        </div>
+        <div className="parent">
+          <Cell
+            num={boardState.board[0]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[1]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[2]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[3]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[4]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[5]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[6]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[7]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+          <Cell
+            num={boardState.board[8]}
+            boardState={boardState}
+            boardDispatch={boardDispatch}
+          />
+        </div>
+        <motion.button whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }} onClick={resetBoard}>Reset</motion.button>
       </div>
-    </div>
+    </>
   );
 };
 
