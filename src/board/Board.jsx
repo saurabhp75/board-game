@@ -1,8 +1,6 @@
-import React, { useEffect, useReducer, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useReducer } from "react";
 import getRandomBoard from "../utils/utils.js";
-import Cell from './Cell'
-import "./board.css";
+import Cell from "./Cell";
 
 function boardReducer(state, action) {
   switch (action.type) {
@@ -35,6 +33,27 @@ function boardReducer(state, action) {
   }
 }
 
+function CustomButton({ resetBoard }) {
+  const [effect, setEffect] = useState(false);
+
+  function handleClick() {
+    setEffect(true);
+    resetBoard();
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      className={`${
+        effect && "animate-wiggle"
+      } mt-3 rounded-md bg-green-600 p-4 text-3xl font-bold hover:scale-90 hover:bg-green-400`}
+      onAnimationEnd={() => setEffect(false)}
+    >
+      Reset
+    </button>
+  );
+}
+
 const Board = () => {
   const [boardState, boardDispatch] = useReducer(boardReducer, {
     board: getRandomBoard(),
@@ -51,12 +70,14 @@ const Board = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="game-heading">Photo memory</div>
-        <div className="game-heading">
+      <div className="font-san mx-3 my-3 flex flex-col items-center">
+        <div className="mb-2 text-3xl font-bold text-emerald-500">
+          Photo memory
+        </div>
+        <div className="mb-2 text-3xl font-bold text-emerald-500">
           {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
         </div>
-        <div className="parent">
+        <div className="grid grid-cols-cell grid-rows-cell gap-2">
           <Cell
             num={boardState.board[0]}
             boardState={boardState}
@@ -103,13 +124,13 @@ const Board = () => {
             boardDispatch={boardDispatch}
           />
         </div>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+        <CustomButton resetBoard={resetBoard} />
+        {/* <button
           onClick={resetBoard}
+          className="mt-3 p-4 rounded-md bg-green-600 text-3xl font-bold hover:scale-90 hover:bg-green-400"
         >
           Reset
-        </motion.button>
+        </button> */}
       </div>
     </>
   );

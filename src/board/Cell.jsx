@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 
 function cellReducer(state, action) {
   switch (action.type) {
@@ -88,14 +88,16 @@ const Cell = ({ num, boardState, boardDispatch }) => {
   };
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
+    <div
+      // whileHover={{ scale: 1.1 }}
+      // whileTap={{ scale: 0.9 }}
       onClick={() => handleClick(num, cellState, boardState)}
+      className="rounded-md bg-green-600 text-center text-5xl font-bold hover:bg-green-400 p-7 hover:scale-110"
     >
       {showText(cellState.state, num)}
-    </motion.div>
+    </div>
   );
+  ṭ;
 };
 
 export default Cell;
