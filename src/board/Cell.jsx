@@ -18,6 +18,11 @@ function cellReducer(state, action) {
         ...state,
         state: "cross",
       };
+    case "changeDuration":
+      return {
+        ...state,
+        // duration,
+      };
     default:
       throw new Error("Unknown action type in cellReducer");
   }
@@ -30,26 +35,28 @@ const Cell = ({ num, boardState, boardDispatch }) => {
 
   const timerId = useRef(null);
 
+  // Used to hide cells after "first-start"
+  // or anytime cell-data changes
   useEffect(() => {
     // console.log(`useEffect:Cell num: ${num}`)
     cellDispatch({ type: "found" });
     const timerId = setTimeout(() => {
       cellDispatch({ type: "hide" });
-    }, 1000);
+    }, boardState.duration);
 
     return () => clearTimeout(timerId);
   }, [num]);
 
+  // Used to hide cells after clicking "re-start"
   useEffect(() => {
     // console.log(`useEffect:Cell num: ${num}`)
     if (boardState.state === "reset") {
       cellDispatch({ type: "found" });
       const timerId = setTimeout(() => {
         cellDispatch({ type: "hide" });
-      }, 1000);
+      }, boardState.duration);
+      return () => clearTimeout(timerId);
     }
-
-    return () => clearTimeout(timerId);
   }, [boardState]);
 
   function showText(state, num) {
@@ -89,8 +96,6 @@ const Cell = ({ num, boardState, boardDispatch }) => {
 
   return (
     <div
-      // whileHover={{ scale: 1.1 }}
-      // whileTap={{ scale: 0.9 }}
       onClick={() => handleClick(num, cellState, boardState)}
       className="rounded-md bg-green-600 text-center text-5xl font-bold hover:bg-green-400 p-7 hover:scale-110"
     >

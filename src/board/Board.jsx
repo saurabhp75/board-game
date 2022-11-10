@@ -1,6 +1,8 @@
 import React, { useState, useReducer } from "react";
 import getRandomBoard from "../utils/utils.js";
 import Cell from "./Cell";
+import Duration from "./Duration";
+import SocialShare from "./SocialShare.jsx";
 
 function boardReducer(state, action) {
   switch (action.type) {
@@ -10,6 +12,7 @@ function boardReducer(state, action) {
         searchNum: 1,
         state: "reset",
         won: false,
+        duration: state.duration,
       };
     case "correctClick":
       return {
@@ -28,12 +31,19 @@ function boardReducer(state, action) {
         searchNum: 0,
         state: "init",
       };
+    case "changeDuration":
+      return {
+        ...state,
+        state: "changeDuration",
+        duration: action.payload,
+      };
     default:
       throw new Error("Unknown action type in board reducer");
   }
 }
 
 function CustomButton({ resetBoard }) {
+  // Used for button animation
   const [effect, setEffect] = useState(false);
 
   function handleClick() {
@@ -46,10 +56,10 @@ function CustomButton({ resetBoard }) {
       onClick={handleClick}
       className={`${
         effect && "animate-wiggle"
-      } mt-3 rounded-md bg-green-600 p-4 text-3xl font-bold hover:scale-90 hover:bg-green-400`}
+      } mt-2 mb-2 rounded-md bg-green-600 p-4 text-3xl font-bold hover:scale-90 hover:bg-green-400`}
       onAnimationEnd={() => setEffect(false)}
     >
-      Reset
+      Start
     </button>
   );
 }
@@ -58,15 +68,16 @@ const Board = () => {
   const [boardState, boardDispatch] = useReducer(boardReducer, {
     board: getRandomBoard(),
     searchNum: 1,
-    state: "init", // "init", "reset", "won"
+    state: "init", // init|reset|won|changeDuration
     won: false,
+    duration: 1000, // 1000ms
   });
 
   function resetBoard() {
     boardDispatch({ type: "reset" });
   }
 
-  console.log(boardState.board);
+  console.log(boardState.state);
 
   return (
     <>
@@ -124,13 +135,9 @@ const Board = () => {
             boardDispatch={boardDispatch}
           />
         </div>
+        <Duration boardState={boardState} boardDispatch={boardDispatch} />
         <CustomButton resetBoard={resetBoard} />
-        {/* <button
-          onClick={resetBoard}
-          className="mt-3 p-4 rounded-md bg-green-600 text-3xl font-bold hover:scale-90 hover:bg-green-400"
-        >
-          Reset
-        </button> */}
+        <SocialShare />
       </div>
     </>
   );
