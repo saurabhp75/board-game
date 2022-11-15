@@ -10,7 +10,7 @@ const discoveryDocs = [
 
 const clientId = import.meta.env.VITE_GDRIVE_CLIENT_ID;
 
-const scopes = "profile";
+const scopes = ["https://www.googleapis.com/auth/drive.readonly"];
 
 function initClient() {
   gapi.client
