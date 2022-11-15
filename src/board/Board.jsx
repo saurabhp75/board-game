@@ -80,7 +80,7 @@ const Board = () => {
 
   return (
     <>
-      <div className="font-san mx-3 my-3 flex flex-col items-center">       
+      <div className="font-san mx-3 my-3 flex flex-col items-center justify-end">
         <div className="m-2 text-xl font-bold text-emerald-500">
           {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
         </div>

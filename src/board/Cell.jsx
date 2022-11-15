@@ -97,7 +97,7 @@ const Cell = ({ num, boardState, boardDispatch }) => {
   return (
     <div
       onClick={() => handleClick(num, cellState, boardState)}
-      className="rounded-md bg-green-600 text-center text-5xl font-bold hover:bg-green-400 p-7 hover:scale-110"
+      className="rounded-md bg-green-600 text-center text-4xl font-bold hover:bg-green-400 p-7 hover:scale-110"
     >
       {showText(cellState.state, num)}
     </div>
