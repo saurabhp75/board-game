@@ -2,7 +2,6 @@ import React, { useState, useReducer } from "react";
 import getRandomBoard from "../utils/utils.js";
 import Cell from "./Cell";
 import Duration from "./Duration";
-import SocialShare from "./SocialShare.jsx";
 
 function boardReducer(state, action) {
   switch (action.type) {
@@ -56,7 +55,7 @@ function CustomButton({ resetBoard }) {
       onClick={handleClick}
       className={`${
         effect && "animate-wiggle"
-      } m-2 rounded-md bg-green-600 p-4 text-3xl font-bold hover:scale-90 hover:bg-green-400`}
+      } m-2 rounded-md bg-green-600 px-4 py-2 text-2xl font-bold hover:scale-90 hover:bg-green-400`}
       onAnimationEnd={() => setEffect(false)}
     >
       Start
@@ -81,11 +80,8 @@ const Board = () => {
 
   return (
     <>
-      <div className="font-san mx-3 my-3 flex flex-col items-center">
-        {/* <div className="m-2 text-3xl font-bold text-emerald-500">
-          Photo memory
-        </div> */}
-        <div className="m-2 text-3xl font-bold text-emerald-500">
+      <div className="font-san mx-3 my-3 flex flex-col items-center">       
+        <div className="m-2 text-xl font-bold text-emerald-500">
           {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
         </div>
         <div className="m-2 grid grid-cols-cell grid-rows-cell gap-2">
@@ -137,7 +133,6 @@ const Board = () => {
         </div>
         <Duration boardState={boardState} boardDispatch={boardDispatch} />
         <CustomButton resetBoard={resetBoard} />
-        {/* <SocialShare /> */}
       </div>
     </>
   );
