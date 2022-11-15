@@ -56,7 +56,7 @@ function CustomButton({ resetBoard }) {
       onClick={handleClick}
       className={`${
         effect && "animate-wiggle"
-      } mt-2 mb-2 rounded-md bg-green-600 p-4 text-3xl font-bold hover:scale-90 hover:bg-green-400`}
+      } m-2 rounded-md bg-green-600 p-4 text-3xl font-bold hover:scale-90 hover:bg-green-400`}
       onAnimationEnd={() => setEffect(false)}
     >
       Start
@@ -82,13 +82,13 @@ const Board = () => {
   return (
     <>
       <div className="font-san mx-3 my-3 flex flex-col items-center">
-        <div className="mb-2 text-3xl font-bold text-emerald-500">
+        {/* <div className="m-2 text-3xl font-bold text-emerald-500">
           Photo memory
-        </div>
-        <div className="mb-2 text-3xl font-bold text-emerald-500">
+        </div> */}
+        <div className="m-2 text-3xl font-bold text-emerald-500">
           {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
         </div>
-        <div className="grid grid-cols-cell grid-rows-cell gap-2">
+        <div className="m-2 grid grid-cols-cell grid-rows-cell gap-2">
           <Cell
             num={boardState.board[0]}
             boardState={boardState}
@@ -137,7 +137,7 @@ const Board = () => {
         </div>
         <Duration boardState={boardState} boardDispatch={boardDispatch} />
         <CustomButton resetBoard={resetBoard} />
-        <SocialShare />
+        {/* <SocialShare /> */}
       </div>
     </>
   );

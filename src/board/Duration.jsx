@@ -10,7 +10,7 @@ function Duration({ boardState, boardDispatch }) {
     <>
       <label
         htmlFor="duration"
-        className="mt-2 mb-2 text-3xl font-bold text-emerald-500"
+        className="m-2 text-3xl font-bold text-emerald-500"
       >
         Flash duration(ms)
       </label>
