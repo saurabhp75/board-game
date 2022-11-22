@@ -57,7 +57,7 @@ function App() {
   };
 
   return (
-    <div className="grid grid-cols-12">
+    <div className="grid grid-cols-12 h-screen">
       <header className="col-span-12 bg-slate-500 py-2 px-4 text-3xl font-bold text-emerald-500">
         Photo memory
       </header>
