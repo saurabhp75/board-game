@@ -69,14 +69,14 @@ const Board = () => {
     searchNum: 1,
     state: "init", // init|reset|won|changeDuration
     won: false,
-    duration: 1000, // 1000ms
+    duration: 3000, // 1000ms
   });
 
   function resetBoard() {
     boardDispatch({ type: "reset" });
   }
 
-  console.log(boardState.state);
+  // console.log(boardState.state);
 
   return (
     <>

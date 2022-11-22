@@ -1,64 +1,59 @@
 import Board from "./board/Board";
 import SocialShare from "./board/SocialShare.jsx";
-import { gapi } from "gapi-script";
+import { useRef } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 
-const apiKey = import.meta.env.VITE_GDRIVE_API_KEY;
-
-const discoveryDocs = [
-  "https://people.googleapis.com/$discovery/rest?version=v1",
-];
-
-const clientId = import.meta.env.VITE_GDRIVE_CLIENT_ID;
-
-const scopes = ["https://www.googleapis.com/auth/drive.readonly"];
-
-function initClient() {
-  gapi.client
-    .init({
-      apiKey: apiKey,
-      discoveryDocs: discoveryDocs,
-      clientId: clientId,
-      scope: scopes,
-    })
-    .then(function () {
-      // Listen for sign-in state changes.
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-      // Handle the initial sign-in state.
-      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-
-      // authorizeButton.onclick = handleAuthClick;
-      // signoutButton.onclick = handleSignoutClick;
-    });
-}
-
-function updateSigninStatus(isSignedIn) {
-  // if (isSignedIn) {
-  //   authorizeButton.style.display = "none";
-  //   signoutButton.style.display = "block";
-  //   makeApiCall();
-  // } else {
-  //   authorizeButton.style.display = "block";
-  //   signoutButton.style.display = "none";
-  // }
-}
-
-function handleAuthClick(event) {
-  gapi.auth2.getAuthInstance().signIn();
-}
-
-function handleSignoutClick(event) {
-  gapi.auth2.getAuthInstance().signOut();
-}
+const scopes =
+  "https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive";
+const url = import.meta.env.VITE_DRIVE_URL + "/files?";
 
 function App() {
-  // console.log(import.meta.env.VITE_GDRIVE_CLIENT_ID);
-  // console.log(import.meta.env.VITE_GDRIVE_API_KEY);
+  const token = useRef(null);
 
-  const handleClientLoad = () => {
-    // Initializes the client with the API key and the Translate API.
-    // console.log(gapi)
-    gapi.load("client:auth2", initClient);
+  const gLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      token.current = tokenResponse.access_token;
+      console.log(token.current);
+    },
+    onError: (errorResponse) => {
+      console.log("$$$$Error in Glogin$$$$");
+      console.log(errorResponse);
+      token.current = null;
+    },
+    scope: scopes,
+  });
+
+  const getFiles = async () => {
+    try {
+      const response = await fetch(url + new URLSearchParams({ key: token }), {
+        headers: {
+          Authorization: `Bearer ${token.current}`,
+          Accept: "application/json",
+        },
+      });
+      return response;
+    } catch (error) {
+      console.log("Request Failed:", error);
+    }
+  };
+
+  const getDriveData = async () => {
+    let response = await getFiles();
+    let data;
+
+    if (response.ok) {
+      data = await response.json();
+      console.log(data.files);
+    } else if (response.status === 401) {
+      // Request access token
+      gLogin();
+      // Fetch Data
+      response = await getFiles();
+      data = await response.json();
+      console.log(data.files);
+    } else {
+      console.log(`Error Response, getData: ${response.status}`);
+    }
   };
 
   return (
@@ -72,12 +67,16 @@ function App() {
       <div className="col-span-12 bg-red-500 p-2 sm:col-span-2">
         Advertising
       </div>
-      <button
-        className="rounded-md bg-sky-600"
-        onClick={() => handleClientLoad()}
-      >
-        Login via Google
-      </button>
+      <div>
+        {/* <button >Get drive files</button> */}
+        <button
+          onClick={getDriveData}
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+        >
+          Get drive files
+        </button>
+      </div>
+
       <footer className="col-span-12 bg-yellow-500 p-2">
         <div className="flex justify-around">
           <div>Created by Saurabh</div>

@@ -20,11 +20,11 @@ function Duration({ boardState, boardDispatch }) {
           type="number"
           id="duration"
           name="duration"
-          min="10"
-          max="10000"
+          min="1000"
+          max="15000"
           value={boardState.duration}
           // defaultValue={boardState.duration}
-          step="10"
+          step="200"
           onChange={handleChange}
         />
       </div>
