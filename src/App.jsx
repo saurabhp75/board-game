@@ -13,7 +13,7 @@ function App() {
   const gLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       token.current = tokenResponse.access_token;
-      console.log(token.current);
+      // console.log(token.current);
     },
     onError: (errorResponse) => {
       console.log("$$$$Error in Glogin$$$$");
