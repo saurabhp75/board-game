@@ -67,11 +67,11 @@ function App() {
       <div className="col-span-12 bg-red-500 p-2 sm:col-span-2">
         Advertising
       </div>
-      <div>
+      <div className="col-span-12">
         {/* <button >Get drive files</button> */}
         <button
           onClick={getDriveData}
-          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          className="w-full rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
         >
           Get drive files
         </button>
