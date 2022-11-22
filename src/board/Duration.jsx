@@ -20,7 +20,7 @@ function Duration({ boardState, boardDispatch }) {
           type="number"
           id="duration"
           name="duration"
-          min="1000"
+          min="200"
           max="15000"
           value={boardState.duration}
           // defaultValue={boardState.duration}
