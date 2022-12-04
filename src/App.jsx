@@ -57,7 +57,7 @@ function App() {
   };
 
   return (
-    <div className="grid grid-cols-12 h-screen">
+    <div className="grid h-screen grid-cols-12">
       <header className="col-span-12 bg-slate-500 py-2 px-4 text-3xl font-bold text-emerald-500">
         Photo memory
       </header>
@@ -71,9 +71,9 @@ function App() {
         {/* <button >Get drive files</button> */}
         <button
           onClick={getDriveData}
-          className="w-full rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          className="h-full w-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
         >
-          Get drive files
+          Link to Google Drive
         </button>
       </div>
 
