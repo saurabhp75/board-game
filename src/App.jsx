@@ -7,7 +7,6 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const tokenClient = useRef(null);
   const gsiScript = useRef(null);
-  const gapiClient = useRef(null);
   const authToken = useRef(null);
 
   // setIsLogin(true);
@@ -61,35 +60,6 @@ function App() {
     setIsLogin(false);
     console.log(`Error initializing tokenClient`);
     console.log(err);
-  }
-
-  // Called when gapi script is loaded by browser. Loads & initializes
-  // the gapi client (via callback) used to call the Gdrive APIs.
-  function initGapiClient() {
-    gapiClient.current = gapi;
-    console.log("gapi client script loaded");
-    gapi.load("client", {
-      callback: configGapiClient,
-      onerror: (error) => {
-        console.log("gapi clientscript failed to load");
-        console.log(error);
-      },
-    });
-  }
-
-  // Callback for loading/initilialising the gapi client
-  // which will be used for calling Gdrive APIs.
-  async function configGapiClient() {
-    try {
-      const gapiObj = await gapi.client.init({
-        apiKey: import.meta.env.VITE_API_KEY,
-        discoveryDocs: [import.meta.env.VITE_DISCOVERY_DOCS],
-      });
-      console.log("gapi client initialized");
-    } catch (err) {
-      console.log("Error in initialising/config gapi client");
-      console.log(err);
-    }
   }
 
   async function createConfigFile() {
@@ -186,9 +156,7 @@ function App() {
     }
 
     console.log(response);
-
     const data = await response.json();
-
     console.log(data);
 
     if (!data.files.length) {
@@ -207,36 +175,32 @@ function App() {
             Authorization: "Bearer " + authToken.current,
           }),
         }
-      )
-        .then((res) => {
-          // console.log(...res.headers);
-          for (let pair of res.headers.entries()) {
-            // console.log(pair[0] + ": " + pair[1]);
-            if (pair[0] === "content-type") {
-              if (pair[1] === "plain/text") {
-                return res.text();
-              } else if (pair[1] == "application/json") {
-                return res.json();
-              }
+      );
+
+      const responseDataPromise = await function (response) {
+        // console.log(...res.headers);
+        for (let pair of res.headers.entries()) {
+          // console.log(pair[0] + ": " + pair[1]);
+          if (pair[0] === "content-type") {
+            if (pair[1] === "plain/text") {
+              return res.text();
+            } else if (pair[1] == "application/json") {
+              return res.json();
             }
           }
-        })
-        .then((data) => console.log(data));
+        }
+      };
+
+      const responseData = await function (responseDataPromise) {
+        console.log(responseData);
+      };
     });
 
     return data.files;
   }
 
   async function deleteConfigFiles() {
-    const token = gapi.auth.getToken().access_token;
-
     try {
-      // const res = await gapi.client.drive.files.list({
-      //   spaces: "appDataFolder",
-      //   fields: "nextPageToken, files(id, name)",
-      //   pageSize: 10,
-      // });
-
       const res = await fetch(
         "https://www.googleapis.com/drive/v3/files?" +
           new URLSearchParams({
@@ -285,25 +249,15 @@ function App() {
 
   useEffect(() => {
     // Load Google client auth library
-    let scriptTag = document.createElement("script");
+    const scriptTag = document.createElement("script");
     scriptTag.id = "authScript";
     scriptTag.src = "https://accounts.google.com/gsi/client";
     scriptTag.onload = initAuth;
     scriptTag.async = true;
     document.head.appendChild(scriptTag);
 
-    // Load Google client-API library
-    scriptTag = document.createElement("script");
-    scriptTag.id = "gapiScript";
-    scriptTag.src = "https://apis.google.com/js/api.js";
-    scriptTag.onload = initGapiClient;
-    scriptTag.async = true;
-    document.head.appendChild(scriptTag);
-
     return () => {
       let scriptElement = document.getElementById("authScript");
-      scriptElement.remove();
-      scriptElement = document.getElementById("gapiScript");
       scriptElement.remove();
     };
   }, []);
@@ -320,13 +274,15 @@ function App() {
 
   function handleSignout() {
     // google.accounts.id.revoke()?
-    const token = gapi.client.getToken();
-    if (token !== null) {
-      google.accounts.oauth2.revoke(token.access_token);
-      authToken.current = null;
-      console.log("Token revoked");
-      setIsLogin(false);
+    if (authToken.current === null) {
+      console.log("No token to revoke");
+      return;
     }
+
+    google.accounts.oauth2.revoke(authToken.current);
+    authToken.current = null;
+    console.log("Token revoked");
+    setIsLogin(false);
   }
 
   return (
