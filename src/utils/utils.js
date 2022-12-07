@@ -14,4 +14,17 @@ const getRandomBoard = () => {
   return boardArray;
 };
 
+function getToken() {
+  const token = gapi.auth.getToken();
+
+  if (token) {
+    return token;
+  } else {
+
+  }
+
+  // return token ? token : 
+
+}
+
 export default getRandomBoard;
