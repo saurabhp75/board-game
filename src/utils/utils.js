@@ -1,5 +1,5 @@
 // Give a random integer between 0 and num, 0 inclusive
-const giveRandom = (num) => Math.floor(Math.random(num) * num);
+const getRandomNum = (num) => Math.floor(Math.random(num) * num);
 
 // Return a random board (array with 9 numbers)
 const getRandomBoard = () => {
@@ -7,24 +7,11 @@ const getRandomBoard = () => {
   const boardArray = [];
 
   for (let i = 9; i > 0; --i) {
-    const temp = giveRandom(i);
+    const temp = getRandomNum(i);
     boardArray.push(numArray[temp]);
     numArray.splice(temp, 1);
   }
   return boardArray;
 };
-
-function getToken() {
-  const token = gapi.auth.getToken();
-
-  if (token) {
-    return token;
-  } else {
-
-  }
-
-  // return token ? token : 
-
-}
 
 export default getRandomBoard;

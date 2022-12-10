@@ -2,6 +2,7 @@ import React, { useState, useReducer } from "react";
 import getRandomBoard from "../utils/utils.js";
 import Cell from "./Cell";
 import Duration from "./Duration";
+import CustomButton from "./CustomButton";
 
 function boardReducer(state, action) {
   switch (action.type) {
@@ -41,28 +42,6 @@ function boardReducer(state, action) {
   }
 }
 
-function CustomButton({ resetBoard }) {
-  // Used for button animation
-  const [effect, setEffect] = useState(false);
-
-  function handleClick() {
-    setEffect(true);
-    resetBoard();
-  }
-
-  return (
-    <button
-      onClick={handleClick}
-      className={`${
-        effect && "animate-wiggle"
-      } m-2 rounded-md bg-green-600 px-4 py-2 text-2xl font-bold hover:scale-90 hover:bg-green-400`}
-      onAnimationEnd={() => setEffect(false)}
-    >
-      Start
-    </button>
-  );
-}
-
 const Board = () => {
   const [boardState, boardDispatch] = useReducer(boardReducer, {
     board: getRandomBoard(),
@@ -71,6 +50,15 @@ const Board = () => {
     won: false,
     duration: 3000, // 1000ms
   });
+
+  if (boardState.won) {
+    // write to appData file
+      // Check for authToken, If it is null, prompt user 
+      // Search for config file with name "config.json"
+      // If file is not present create one.
+      // Else store the data in the file for the user.
+      
+  }
 
   function resetBoard() {
     boardDispatch({ type: "reset" });
