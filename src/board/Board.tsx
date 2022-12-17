@@ -1,10 +1,12 @@
-import React, { useState, useReducer } from "react";
+import { useReducer, useRef, useEffect } from "react";
 import getRandomBoard from "../utils/utils.js";
 import Cell from "./Cell";
 import Duration from "./Duration";
 import CustomButton from "./CustomButton";
+import useGdrive from "../hooks/useGdrive";
+import { boardState, boardAction } from "../types/boardTypes";
 
-function boardReducer(state, action) {
+function boardReducer(state: boardState, action: boardAction): boardState {
   switch (action.type) {
     case "reset":
       return {
@@ -35,7 +37,7 @@ function boardReducer(state, action) {
       return {
         ...state,
         state: "changeDuration",
-        duration: action.payload,
+        duration: action.payload as number,
       };
     default:
       throw new Error("Unknown action type in board reducer");
@@ -43,6 +45,8 @@ function boardReducer(state, action) {
 }
 
 const Board = () => {
+  const startTime = useRef<number | null>(null);
+
   const [boardState, boardDispatch] = useReducer(boardReducer, {
     board: getRandomBoard(),
     searchNum: 1,
@@ -51,20 +55,44 @@ const Board = () => {
     duration: 3000, // 1000ms
   });
 
-  if (boardState.won) {
-    // write to appData file
-      // Check for authToken, If it is null, prompt user 
-      // Search for config file with name "config.json"
-      // If file is not present create one.
-      // Else store the data in the file for the user.
-      
+  const [
+    createConfigFile,
+    searchConfigFiles,
+    deleteConfigFiles,
+    handleSignout,
+    authorizeClient,
+    UpdateFile,
+    getGameData,
+  ] = useGdrive();
+
+  if (boardState.state == "reset") {
+    startTime.current = Date.now();
   }
+
+  useEffect(() => {
+    if (boardState.won) {
+      console.log("You won!!!");
+      console.log(boardState.duration);
+
+      getGameData()
+        .then((data) => {
+          if (data.hasOwnProperty(boardState.duration)) {
+            data[boardState.duration]++;
+            console.log("has own property true");
+          } else {
+            data[boardState.duration] = 1;
+          }
+          console.log(data);
+          return data;
+        })
+        .then((data) => UpdateFile(data))
+        .then((data) => console.log(`file: ${data} updated`));
+    }
+  }, [boardState.state]);
 
   function resetBoard() {
     boardDispatch({ type: "reset" });
   }
-
-  // console.log(boardState.state);
 
   return (
     <>
@@ -119,8 +147,43 @@ const Board = () => {
             boardDispatch={boardDispatch}
           />
         </div>
+      </div>
+      <div className="flex items-stretch justify-around">
         <Duration boardState={boardState} boardDispatch={boardDispatch} />
         <CustomButton resetBoard={resetBoard} />
+        <button
+          onClick={authorizeClient}
+          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+        >
+          Authorize for GDrive
+        </button>
+        <button
+          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={handleSignout}
+        >
+          Revoke token
+        </button>
+
+        {/* <button
+          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={createConfigFile}
+        >
+          Create Cfg file
+        </button> */}
+
+        <button
+          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={searchConfigFiles}
+        >
+          Search Cfg files
+        </button>
+
+        <button
+          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+          onClick={deleteConfigFiles}
+        >
+          Delete Cfg files
+        </button>
       </div>
     </>
   );

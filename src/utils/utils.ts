@@ -1,5 +1,5 @@
 // Give a random integer between 0 and num, 0 inclusive
-const getRandomNum = (num) => Math.floor(Math.random(num) * num);
+const getRandomNum = (num) => Math.floor(Math.random() * num);
 
 // Return a random board (array with 9 numbers)
 const getRandomBoard = () => {

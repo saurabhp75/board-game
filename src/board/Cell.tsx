@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer, useRef } from "react";
-// import { motion } from "framer-motion";
+import { useEffect, useReducer, useRef } from "react";
+import { cellState, cellAction } from "../types/boardTypes";
 
-function cellReducer(state, action) {
+function cellReducer(state: cellState, action: cellAction): cellState {
   switch (action.type) {
     case "hide":
       return {
@@ -97,7 +97,7 @@ const Cell = ({ num, boardState, boardDispatch }) => {
   return (
     <div
       onClick={() => handleClick(num, cellState, boardState)}
-      className="rounded-md bg-green-600 text-center text-4xl font-bold hover:bg-green-400 p-7 hover:scale-110"
+      className="rounded-md bg-green-600 p-7 text-center text-4xl font-bold hover:scale-110 hover:bg-green-400"
     >
       {showText(cellState.state, num)}
     </div>

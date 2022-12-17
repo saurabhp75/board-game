@@ -2,18 +2,18 @@ import Board from "./board/Board";
 import SocialShare from "./board/SocialShare";
 import { useState } from "react";
 // import ActionButtons from "./board/ActionButtons";
-import useGdrive from "./hooks/useGdrive";
+// import useGdrive from "./hooks/useGdrive";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-  const [
-    createConfigFile,
-    searchConfigFiles,
-    deleteConfigFiles,
-    handleSignout,
-    authorizeClient,
-  ] = useGdrive();
-  
+  // const [
+  //   createConfigFile,
+  //   searchConfigFiles,
+  //   deleteConfigFiles,
+  //   handleSignout,
+  //   authorizeClient,
+  //   UpdateFile,
+  // ] = useGdrive();
 
   return (
     <div className="grid h-screen grid-cols-12">
@@ -27,44 +27,8 @@ function App() {
       <div className="col-span-12 bg-red-500 p-2 sm:col-span-2">
         Advertising
       </div>
-      <div className="col-span-12">
-        <button
-          onClick={authorizeClient}
-          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-        >
-          Authorize for GDrive
-        </button>
-        <button
-          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={handleSignout}
-        >
-          Revoke token
-        </button>
-
-        <button
-          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={createConfigFile}
-        >
-          Create Cfg file
-        </button>
-
-        <button
-          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={searchConfigFiles}
-        >
-          Search Cfg files
-        </button>
-
-        <button
-          className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={deleteConfigFiles}
-        >
-          Delete Cfg files
-        </button>
-
-        {/* <ActionButtons></ActionButtons> */}
-
-        {/* {isLogin ? null : (
+      {/* <div className="col-span-12"> */}
+      {/* {isLogin ? null : (
           <button
             onClick={authorizeClient}
             className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
@@ -106,7 +70,7 @@ function App() {
             Delete Cfg files
           </button>
         ) : null} */}
-      </div>
+      {/* </div> */}
 
       <footer className="col-span-12 bg-yellow-500 p-2">
         <div className="flex justify-around">
