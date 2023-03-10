@@ -16,7 +16,7 @@ function App() {
   // ] = useGdrive();
 
   return (
-    <div className="min-h-full grid grid-cols-12">
+    <div className="grid min-h-full grid-cols-12">
       <header className="col-span-12 bg-slate-500 py-2 px-4 text-3xl font-bold text-emerald-500">
         Photo memory
       </header>
@@ -24,7 +24,7 @@ function App() {
       <div className="col-span-12 p-2 sm:col-span-10">
         <Board />
       </div>
-      <div className="col-span-12 bg-red-500 p-2 sm:col-span-2">
+      <div className="flex justify-center items-center col-span-12 bg-red-500 p-2 sm:col-span-2">
         Advertising
       </div>
       {/* <div className="col-span-12"> */}
@@ -72,12 +72,10 @@ function App() {
         ) : null} */}
       {/* </div> */}
 
-      <footer className="col-span-12 bg-yellow-500 p-2">
-        <div className="flex justify-around">
-          <div>Created by Saurabh</div>
-          <div>
-            <SocialShare />
-          </div>
+      <footer className="col-span-12 flex items-center justify-between bg-yellow-500 p-2">
+        <div>Created by Saurabh</div>
+        <div>
+          <SocialShare />
         </div>
       </footer>
     </div>
