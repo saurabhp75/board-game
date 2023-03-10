@@ -1,5 +1,5 @@
-import { useEffect, useReducer, useRef } from "react";
-import { cellState, cellAction } from "../types/boardTypes";
+import { useEffect, useReducer, useRef, FC } from "react";
+import { cellState, cellAction, boardState, boardAction } from "../types/boardTypes";
 
 function cellReducer(state: cellState, action: cellAction): cellState {
   switch (action.type) {
@@ -28,7 +28,13 @@ function cellReducer(state: cellState, action: cellAction): cellState {
   }
 }
 
-const Cell = ({ num, boardState, boardDispatch }) => {
+interface CellProps {
+  num: number;
+  boardState: boardState;
+  boardDispatch: React.Dispatch<boardAction>;
+}
+
+const Cell: FC<CellProps> = ({ num, boardState, boardDispatch }) => {
   const [cellState, cellDispatch] = useReducer(cellReducer, {
     state: "hide", // hide|found
   });

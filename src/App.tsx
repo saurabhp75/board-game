@@ -16,7 +16,7 @@ function App() {
   // ] = useGdrive();
 
   return (
-    <div className="grid h-screen grid-cols-12">
+    <div className="min-h-full grid grid-cols-12">
       <header className="col-span-12 bg-slate-500 py-2 px-4 text-3xl font-bold text-emerald-500">
         Photo memory
       </header>

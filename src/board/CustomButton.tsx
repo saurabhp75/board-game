@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+// interface CustomButtonProps {
+//   resetBoard: () => void;
+// }
+
 export default function CustomButton({ resetBoard }) {
   // Used for button animation
   const [effect, setEffect] = useState(false);

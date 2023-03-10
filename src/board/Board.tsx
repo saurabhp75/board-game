@@ -1,4 +1,4 @@
-import { useReducer, useRef, useEffect } from "react";
+import { useReducer, useRef, useEffect, FC } from "react";
 import getRandomBoard from "../utils/utils.js";
 import Cell from "./Cell";
 import Duration from "./Duration";
@@ -44,7 +44,7 @@ function boardReducer(state: boardState, action: boardAction): boardState {
   }
 }
 
-const Board = () => {
+const Board: FC = () => {
   const startTime = useRef<number | null>(null);
 
   const [boardState, boardDispatch] = useReducer(boardReducer, {
@@ -100,6 +100,7 @@ const Board = () => {
         <div className="m-2 text-xl font-bold text-emerald-500">
           {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
         </div>
+
         <div className="m-2 grid grid-cols-cell grid-rows-cell gap-2">
           <Cell
             num={boardState.board[0]}
@@ -148,10 +149,11 @@ const Board = () => {
           />
         </div>
       </div>
+
       <div className="flex items-stretch justify-around">
         <Duration boardState={boardState} boardDispatch={boardDispatch} />
         <CustomButton resetBoard={resetBoard} />
-        <button
+        {/* <button
           onClick={authorizeClient}
           className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
         >
@@ -164,12 +166,12 @@ const Board = () => {
           Revoke token
         </button>
 
-        {/* <button
+        <button
           className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
           onClick={createConfigFile}
         >
           Create Cfg file
-        </button> */}
+        </button> 
 
         <button
           className="mx-2 rounded-md bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
@@ -183,7 +185,7 @@ const Board = () => {
           onClick={deleteConfigFiles}
         >
           Delete Cfg files
-        </button>
+        </button> */}
       </div>
     </>
   );

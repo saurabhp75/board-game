@@ -11,14 +11,30 @@ function useGdrive() {
   const tokenClient = useRef<null | TokenClient>(null);
   const authToken = useRef<null | string>(null);
   const fileIDRef = useRef<null | number>(null);
+  const tokenInitTime = useRef<null | number>(null);
 
-  // Called when auth script is loaded by browser. Initializes
-  // the "tokenClient", which can/will request the token.
+
+  const start = Date.now();
+
+  setInterval(() => {
+    // send the token request to check token expiry
+    // If token expired then show notification
+
+    const tokenExpired = isTokenExpired();
+    if (!isTokenExpired) {
+      console.log("Error in checking token expiry");
+    } else if (isTokenExpired === true) {
+    }
+    
+  }, 3600_000);
+
+  // Called on auth script load by browser. Initializes
+  // tokenClient, which requests the token via requestAccessToken
   function handleAuthscriptLoad() {
     console.log("auth client script loaded:");
 
-    // tokenClient will be used to get auth token
-    // when user clicks "Authorize" button
+    // Initializes the tokenClient and callbacks for token
+    // request.
     tokenClient.current = google.accounts.oauth2.initTokenClient({
       client_id: import.meta.env.VITE_CLIENT_ID,
       scope: import.meta.env.VITE_SCOPES,
@@ -29,8 +45,8 @@ function useGdrive() {
     console.log("Auth client initialized:");
   }
 
-  // Callback when response is recieved for token request
-  // by tokenClient
+  // Callback for recieved response by token client
+  // for token request
   async function handleCredentialResponse(
     response: tokenResponse
   ): Promise<void> {
@@ -258,9 +274,75 @@ function useGdrive() {
     return status;
   }
 
+  // Check for token expiry, return true if expired otherwise false
+  // return null in case of error
+  async function isTokenExpired(): Promise<null | boolean> {
+    let response;
+
+    try {
+      response = await fetch(
+        "https://www.googleapis.com/drive/v3/files?" +
+          new URLSearchParams({
+            spaces: "appDataFolder",
+            fields: "nextPageToken, files(id, name)",
+            pageSize: "10",
+          }),
+        {
+          headers: new Headers({
+            Authorization: "Bearer " + authToken.current,
+          }),
+        }
+      );
+    } catch (err) {
+      console.log(`Error fetching files: ${err}`);
+      return null;
+    }
+
+    if (response.status === 401 || response.status === 403) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Get list of config files
+  // async function getFileList(): Promise<null | FILE[]> {
+  //   let response;
+
+  //   // Fetch all app-config files
+  //   try {
+  //     response = await fetch(
+  //       "https://www.googleapis.com/drive/v3/files?" +
+  //         new URLSearchParams({
+  //           spaces: "appDataFolder",
+  //           fields: "nextPageToken, files(id, name)",
+  //           pageSize: "10",
+  //         }),
+  //       {
+  //         headers: new Headers({
+  //           Authorization: "Bearer " + authToken.current,
+  //         }),
+  //       }
+  //     );
+  //   } catch (err) {
+  //     console.log(`Error fetching files: ${err}`);
+  //     return null;
+  //   }
+
+  //   try {
+  //     // console.log(response);
+  //     const data = await response?.json();
+  //     return data.files;
+  //     // console.log(data);
+  //   } catch (err) {
+  //     console.log(`Error fetching file response: ${err}`);
+  //     return null;
+  //   }
+  // }
+
   // Search for a file: "fileName" and return id.
   // Otherwise return null.
-  async function searchFile(fileName: string): Promise<null | number> {
+  async function searchFile(fileName: string): Promise<null | string> {
     //Check for Auth token
     if (!authToken.current) {
       console.log("Token not initialised:");
@@ -268,6 +350,8 @@ function useGdrive() {
     }
 
     console.log(`Searching for file: ${fileName}....`);
+
+    const fileList = await getFileList();
 
     let response;
 
@@ -296,7 +380,7 @@ function useGdrive() {
 
     // console.log(response);
     const data = await response?.json();
-    // console.log(data);
+    // // console.log(data);
 
     if (!data.files.length) {
       console.log(`file: ${fileName} not found`);
@@ -499,7 +583,7 @@ function useGdrive() {
     };
   }, []);
 
-  function authorizeClient() {
+  function authorizeClient(event: React.MouseEvent<HTMLButtonElement>) {
     if (tokenClient.current) {
       tokenClient.current.requestAccessToken();
       console.log("After requestAccessToken:");
