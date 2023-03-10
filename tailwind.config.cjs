@@ -5,11 +5,11 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        // Simple 16 column grid
+        // Simple 3 column grid
         cell: "repeat(3, minmax(0, 6rem))",
       },
       gridTemplateRows: {
-        // Simple 16 column grid
+        // Simple 3 row grid
         cell: "repeat(3, minmax(0, 6rem))",
       },
       keyframes: {

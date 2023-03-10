@@ -13,7 +13,7 @@ function Duration({ boardState, boardDispatch }) {
           htmlFor="duration"
           className="m-2 text-xl font-bold text-emerald-500"
         >
-          Duration(ms)
+          Time(ms)
         </label>
         <input
           className="mb-2 rounded-md border-4 border-emerald-500 text-xl font-bold text-emerald-500"

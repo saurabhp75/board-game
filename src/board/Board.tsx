@@ -98,7 +98,7 @@ const Board: FC = () => {
     <>
       <div className="font-san mx-3 my-3 flex flex-col items-center justify-end">
         <div className="m-2 text-xl font-bold text-emerald-500">
-          {boardState.won ? "You win!" : `Search for ${boardState.searchNum}`}
+          {boardState.won ? "You win🏆🎆" : `Search for ${boardState.searchNum}`}
         </div>
 
         <div className="m-2 grid grid-cols-cell grid-rows-cell gap-2">
@@ -150,7 +150,7 @@ const Board: FC = () => {
         </div>
       </div>
 
-      <div className="flex items-stretch justify-around">
+      <div className="flex justify-around items-baseline">
         <Duration boardState={boardState} boardDispatch={boardDispatch} />
         <CustomButton resetBoard={resetBoard} />
         {/* <button
